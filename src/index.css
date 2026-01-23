@@ -121,3 +121,10 @@
     @apply bg-background text-foreground;
   }
 }
+[data-radix-accordion-trigger] {
+  text-decoration: none !important;
+}
+[data-radix-accordion-trigger]:hover {
+  text-decoration: none !important;
+}
+[data-radix-accordion-trigger]:hover { border: none !important; outline: none !important; }

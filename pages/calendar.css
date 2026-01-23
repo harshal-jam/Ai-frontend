@@ -1,0 +1,58 @@
+/* Header row */
+.rbc-header {
+  background: #0f766e;
+  color: white;
+  font-weight: 600;
+  padding: 6px 0;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+/* Today highlight */
+.rbc-today {
+  background: #fef3c7 !important;
+}
+
+/* Event card */
+.rbc-event {
+  background: #fef3c7 !important;
+  color: #000 !important;
+  border-left: 4px solid #f59e0b !important;
+  border-radius: 6px !important;
+  padding: 4px 6px !important;
+  font-size: 12px;
+  white-space: pre-line;
+}
+
+.rbc-event-label {
+  display: none;
+}
+
+/* Calendar height fix */
+.rbc-calendar {
+  min-height: 600px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .rbc-calendar {
+    min-height: 500px;
+  }
+
+  .rbc-header {
+    font-size: 10px;
+  }
+
+  .rbc-event {
+    font-size: 11px;
+    padding: 2px 4px !important;
+  }
+
+  .rbc-date-cell {
+    font-size: 11px;
+  }
+
+  .rbc-month-view {
+    overflow-x: auto;
+  }
+}
