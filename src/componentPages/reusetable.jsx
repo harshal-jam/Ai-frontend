@@ -6,7 +6,7 @@ function Reusetable({
     children,
 }) {
     return(
-          <div className="bg-gray-300 p-3 min-h-screen capitalize">
+          <div className="bg-gray-50 p-3 min-h-screen capitalize">
       {/* Header */}
       <div className="flex  justify-between gap-2 p-2">
         <p className="text-2xl font-bold">{headertitle}</p>

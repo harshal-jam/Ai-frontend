@@ -130,7 +130,7 @@ function Signup() {
 
                     <p className="text-sm text-gray-500">
                       Already have an account?
-                      <a className="text-black ">Log in</a>
+                      <a className="text-black" href="/">Log in</a>
                     </p>
 
                     <p className="text-xs text-gray-400 text-center">

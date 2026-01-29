@@ -5,23 +5,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-function TimeSelect({ defaultValue }) {
+const TimeSelect = ({ defaultValue , value , onChange}) => {
   return (
-    <Select defaultValue={defaultValue}>
-      <SelectTrigger >
+    <Select  value={value}
+      onValueChange={(val) => onChange(val)} defaultValue={defaultValue}>
+      <SelectTrigger className="h-9">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
         {[
           "09:00 am",
           "10:00 am",
-          "11:00 am",
           "12:00 pm",
           "01:00 pm",
-          "02:00 pm",
-          "03:00 pm",
-          "04:00 pm",
-          "05:00 pm",
           "06:00 pm",
         ].map((time) => (
           <SelectItem key={time} value={time}>
@@ -31,5 +27,5 @@ function TimeSelect({ defaultValue }) {
       </SelectContent>
     </Select>
   );
-}
+};
 export default TimeSelect;

@@ -5,20 +5,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-function DayOffRow({ day }) {
+const DayOffRow = ({ day }) => {
   return (
-    <div className="grid grid-cols-[120px_1fr] gap-3 items-center">
-      <span className="text-sm font-medium">{day}</span>
-      <Select defaultValue="day-off">
-        <SelectTrigger>
-          <SelectValue />
+    <div className="grid grid-cols-[110px_140px] items-center gap-3">
+      <span className="text-sm text-gray-700">{day}</span>
+
+      <Select defaultValue="off">
+        <SelectTrigger className="h-9">
+          <SelectValue placeholder="Day Off" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="day-off">Day Off</SelectItem>
-          <SelectItem value="09:00 am">09:00 am</SelectItem>
+          <SelectItem value="off">Day Off</SelectItem>
+          <SelectItem value="working">Working</SelectItem>
         </SelectContent>
       </Select>
     </div>
   );
-}
+};
 export default DayOffRow;

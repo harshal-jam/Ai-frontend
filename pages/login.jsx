@@ -118,7 +118,7 @@ function Login() {
 
                 <p className="text-sm text-gray-500">
                   you don't have an account?{" "}
-                  <a className="text-white font-extrabold  cursor-pointer">
+                  <a href="/signup" className="text-white font-extrabold  cursor-pointer">
                     sign up
                   </a>
                 </p>
