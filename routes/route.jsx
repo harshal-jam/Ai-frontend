@@ -8,8 +8,10 @@ import Appointments from "../pages/appointment";
 import Calendar from "../pages/calendar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Signup from "../pages/signup";
+import { ServiceTitleProvider } from "../src/context/servicecontext";
 function Routing() {
   return (
+    <ServiceTitleProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
@@ -23,6 +25,7 @@ function Routing() {
         <Route path="/appointments" element={<Appointments />} />
       </Routes>
     </BrowserRouter>
+    </ServiceTitleProvider>
   );
 }
 export default Routing;

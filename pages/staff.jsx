@@ -13,13 +13,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -31,6 +24,7 @@ import TimeSelect from "@/componentPages/timeslectreuse";
 import DayOffRow from "@/componentPages/reuseday";
 import Reusesidebar from "@/componentPages/reusesidebar";
 import { useForm } from "react-hook-form";
+import { useServiceTitles } from "../src/context/servicecontext";
 function Staff() {
   const tablebody = [
     {
@@ -61,6 +55,7 @@ function Staff() {
       },
     },
   ];
+  const {titles} = useServiceTitles();
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       name: "",
@@ -204,25 +199,6 @@ function Staff() {
                       <Input defaultValue="+919311057767" className="mt-1" />
                     </div>
                   </div>
-
-                  <div className="mt-4 flex flex-col md:flex-row gap-3 items-end">
-                    <div className="flex-1">
-                      <Label className="text-xs font-semibold">WP USER</Label>
-                      <Select>
-                        <SelectTrigger className="mt-1">
-                          <SelectValue placeholder="--WP User--" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="1">User 1</SelectItem>
-                          <SelectItem value="2">User 2</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <Button className="bg-emerald-700 hover:bg-emerald-800 rounded-md px-6 cursor-pointer">
-                      NEW WP USER
-                    </Button>
-                  </div>
                 </AccordionContent>
               </AccordionItem>
 
@@ -236,16 +212,9 @@ function Staff() {
                 </AccordionTrigger>
                 <AccordionContent className="px-4 py-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {[
-                      "Joint and Spine Care",
-                      "Metabolic Disorders",
-                      "Urinary and Kidney Care",
-                      "Men's Health",
-                      "Women's Health",
-                      "Child Health",
-                    ].map((service) => (
+                    {titles.map((service,i) => (
                       <label
-                        key={service}
+                        key={i}
                         className="flex items-center gap-2 text-sm"
                       >
                         <input type="checkbox" className="accent-emerald-600" />
@@ -271,11 +240,11 @@ function Staff() {
                     (day) => (
                       <div
                         key={day}
-                        className="grid grid-cols-[110px_140px_30px_140px] items-center gap-3"
+                        className=" grid grid-cols-[110px_110px_30px_110px] items-center gap-2"
                       >
                         <span className="text-sm text-gray-700">{day}</span>
 
-                        <TimeSelect defaultValue="09:00 am" />
+                        <TimeSelect className="m-0" defaultValue="09:00 am" />
 
                         <span className="text-center text-sm text-muted-foreground">
                           to
@@ -296,7 +265,7 @@ function Staff() {
                   <div className="border-t pt-3 mt-3" />
 
                   {/* Lunch Break */}
-                  <div className="grid grid-cols-[110px_140px_30px_140px] items-center gap-3">
+                  <div className="grid grid-cols-[110px_110px_30px_110px] gap-2 items-center ">
                     <span className="text-sm text-gray-700">Lunch Break</span>
 
                     <TimeSelect defaultValue="12:00 pm" />
@@ -367,27 +336,6 @@ function Staff() {
                         />
                       </div>
                     </div>
-
-                    <div className="mt-4 flex flex-col md:flex-row gap-3 items-end">
-                      <div className="flex-1">
-                        <Label className="text-xs font-semibold">WP USER</Label>
-                        <Select
-                          onValueChange={(value) => setValue("wp", value)}
-                        >
-                          <SelectTrigger className="mt-1">
-                            <SelectValue placeholder="--WP User--" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="1">User 1</SelectItem>
-                            <SelectItem value="2">User 2</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <Button className="bg-emerald-700 hover:bg-emerald-800 rounded-md px-6">
-                        NEW WP USER
-                      </Button>
-                    </div>
                   </AccordionContent>
                 </AccordionItem>
 
@@ -446,7 +394,7 @@ function Staff() {
                     ].map((day) => (
                       <div
                         key={day}
-                        className="grid grid-cols-[110px_140px_30px_140px] items-center gap-3"
+                        className="grid grid-cols-[110px_110px_30px_110px] items-center gap-2"
                       >
                         <span className="text-sm text-gray-700">{day}</span>
 

@@ -75,7 +75,7 @@ function Reusesidebar({children}) {
             </SidebarGroup>{" "}
           </SidebarContent>
         </Sidebar>
-        <div>
+        <div className="w-full">
             {children}
         </div>
         </div>
