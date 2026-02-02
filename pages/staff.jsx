@@ -18,45 +18,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import TimeSelect from "@/componentPages/timeslectreuse";
 import DayOffRow from "@/componentPages/reuseday";
 import Reusesidebar from "@/componentPages/reusesidebar";
 import { useForm } from "react-hook-form";
 import { useServiceTitles } from "../src/context/servicecontext";
+import api from "@/api";
 function Staff() {
-  const tablebody = [
-    {
-      fullName: "DR BC Lakhera",
-      email: "Lakherahomoeopathycentre@gmail.com",
-      phone: "+919311057767",
-      services: [
-        "Joint and Spine Care",
-        "Metabolic Disorders",
-        "Urinary and Kidney Care",
-        "Men's Health",
-        "Women's Health",
-        "Child Health",
-        "Skin and Hair",
-        "Neurological Disorders",
-        "Mental Health",
-        "Digestive Disorders",
-        "Respiratory Disorders",
-      ],
-      workingHours: {
-        Monday: "09:00 - 18:00",
-        Tuesday: "09:00 - 18:00",
-        Wednesday: "09:00 - 18:00",
-        Thursday: "Day Off",
-        Friday: "09:00 - 18:00",
-        Saturday: "09:00 - 18:00",
-        Sunday: "Day Off",
-      },
-    },
-  ];
-  const {titles} = useServiceTitles();
-  const newtitle = [...new Set(titles)]
+  const { titles } = useServiceTitles();
+  const [showstaff, setshowstaff] = useState([]);
+  const newtitle = [...new Set(titles)];
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       name: "",
@@ -81,8 +54,38 @@ function Staff() {
   const setTime = (day, type, value) => {
     setValue(`workingHours.${day}.${type}`, value);
   };
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    try {
+      const payload = {
+        fullName: data.name,
+        email: data.email,
+        phone: data.phone,
+        services: data.services,
+        workingHours: data.workingHours,
+      };
+      const res = await api.post("/api/staff", payload);
+      alert("staff creation done successfully");
+      fetchstaff();
+      setstaffpopup(false);
+    } catch (error) {
+      console.log(error);
+      alert("staff creation failed");
+    }
+  };
+  useEffect(() => {
+    fetchstaff();
+  }, []);
+  const fetchstaff = async () => {
+    try {
+      const userid = localStorage.getItem("userid");
+      const res = await api.get(`/api/staff/${userid}`);
+      setshowstaff(res.data);
+      console.log(res.data, "FULL RESPONSE");
+    } catch (error) {
+      console.log(error);
+      alert("staff fetch failed", error);
+    }
   };
 
   return (
@@ -120,7 +123,7 @@ function Staff() {
               </TableHeader>
 
               <TableBody>
-                {tablebody.map((item, i) => (
+                {showstaff?.map((item, i) => (
                   <TableRow key={i} className="text-sm sm:text-base">
                     <TableCell>{item.fullName}</TableCell>
                     <TableCell>{item.email}</TableCell>
@@ -134,20 +137,20 @@ function Staff() {
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-wrap gap-2 max-w-sm">
-                        {Object.entries(item.workingHours).map(
-                          ([day, time]) => (
-                            <div
-                              key={day}
-                              className={
-                                time === "Day Off"
-                                  ? "bg-gray-300 text-gray-700 text-xs px-2 py-1 rounded"
-                                  : "bg-green-500 text-white text-xs px-2 py-1 rounded"
-                              }
-                            >
-                              {time}
-                            </div>
-                          ),
-                        )}
+                        {item.workingHours?.map((wh) => (
+                          <div
+                            key={wh._id}
+                            className={
+                              wh.isDayOff
+                                ? "bg-gray-300 text-gray-700 text-xs px-2 py-1 rounded"
+                                : "bg-green-600 text-white text-xs px-2 py-1 rounded"
+                            }
+                          >
+                            {wh.isDayOff
+                              ? `${wh.day}: Day Off`
+                              : `${wh.day}: ${wh.startTime} - ${wh.endTime}`}
+                          </div>
+                        ))}
                       </div>
                     </TableCell>
 
@@ -213,13 +216,13 @@ function Staff() {
                 <AccordionContent className="px-4 py-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {[
-                        "Joint and Spine Care",
-                        "Metabolic Disorders",
-                        "Urinary and Kidney Care",
-                        "Men's Health",
-                        "Women's Health",
-                        "Child Health",
-                      ].map((service,i) => (
+                      "Joint and Spine Care",
+                      "Metabolic Disorders",
+                      "Urinary and Kidney Care",
+                      "Men's Health",
+                      "Women's Health",
+                      "Child Health",
+                    ].map((service, i) => (
                       <label
                         key={i}
                         className="flex items-center gap-2 text-sm"
@@ -356,7 +359,7 @@ function Staff() {
                   </AccordionTrigger>
                   <AccordionContent className="px-4 py-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {newtitle.map((service) =>(
+                      {newtitle.map((service) => (
                         <label
                           key={service}
                           className="flex items-center gap-2 text-sm"
