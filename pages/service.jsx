@@ -26,9 +26,7 @@ import Reusetable from "@/componentPages/reusetable";
 import api from "@/api";
 import Reusesidebar from "@/componentPages/reusesidebar";
 import { useForm } from "react-hook-form";
-import { useServiceTitles } from "../src/context/servicecontext";
 function Service() {
-  const { setTitles } = useServiceTitles();
   const [addservice, setaddservice] = useState([]);
   const [editService, seteditService] = useState(null);
   const { register, handleSubmit, setValue } = useForm({
@@ -48,7 +46,7 @@ function Service() {
     try {
       const payload = { ...data };
       const res = await api.post("/api/services", payload);
-      // fetchservice();
+      fetchservice();
       alert("service add successsfully added");
       setservicepopup(false);
     } catch (error) {
@@ -57,16 +55,17 @@ function Service() {
     }
   };
   // fetch the service for print ui
-  // const fetchservice = async () => {
-  //   try {
-  //     const res = await api.get("/api/services");
-  //     setaddservice(res.data.data);
-  //     setTitles(res.data.data.map((item) => item.title));
-  //   } catch (error) {
-  //     console.log(error);
-  //     alert("fetch the service is failed");
-  //   }
-  // };
+  const fetchservice = async () => {
+    try {
+      const res = await api.get("/api/services");
+      setaddservice(res.data.data);
+      alert("fetch successfully done ")
+      // setTitles(res.data.data);
+    } catch (error) {
+      console.log(error);
+      alert("fetch the service is failed");
+    }
+  };
   const handleEdit = async (item) => {
     seteditService(item);
     setValue("title", item.title);
@@ -114,6 +113,7 @@ function Service() {
 
   useEffect(() => {
     fetchnotes();
+    fetchservice();
   }, []);
 
   const fillcategory = async (e) => {

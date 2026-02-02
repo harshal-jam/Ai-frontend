@@ -26,7 +26,6 @@ export const ServiceTitleProvider = ({ children }) => {
     </ServiceTitleContext.Provider>
   );
 };
-
 export const useServiceTitles = () => {
   return useContext(ServiceTitleContext);
 };

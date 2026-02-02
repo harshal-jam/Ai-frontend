@@ -56,6 +56,7 @@ function Staff() {
     },
   ];
   const {titles} = useServiceTitles();
+  const newtitle = [...new Set(titles)]
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       name: "",
@@ -171,7 +172,6 @@ function Staff() {
         </div>
         <Popup open={open} onOpenChange={setopen} title="edit staff #4">
           <div className="space-y-4">
-            {/* ✅ ONE Accordion Wrapper */}
             <Accordion type="single" className="space-y-1.5" collapsible>
               {/* DETAILS */}
               <AccordionItem
@@ -212,7 +212,14 @@ function Staff() {
                 </AccordionTrigger>
                 <AccordionContent className="px-4 py-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {titles.map((service,i) => (
+                    {[
+                        "Joint and Spine Care",
+                        "Metabolic Disorders",
+                        "Urinary and Kidney Care",
+                        "Men's Health",
+                        "Women's Health",
+                        "Child Health",
+                      ].map((service,i) => (
                       <label
                         key={i}
                         className="flex items-center gap-2 text-sm"
@@ -349,14 +356,7 @@ function Staff() {
                   </AccordionTrigger>
                   <AccordionContent className="px-4 py-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {[
-                        "Joint and Spine Care",
-                        "Metabolic Disorders",
-                        "Urinary and Kidney Care",
-                        "Men's Health",
-                        "Women's Health",
-                        "Child Health",
-                      ].map((service) => (
+                      {newtitle.map((service) =>(
                         <label
                           key={service}
                           className="flex items-center gap-2 text-sm"
@@ -365,9 +365,9 @@ function Staff() {
                             type="checkbox"
                             value={service}
                             {...register("services")}
-                            className="accent-emerald-600"
+                            className="accent-emerald-600 uppercase"
                           />
-                          {service}
+                          {service.toUpperCase()}
                         </label>
                       ))}
                     </div>
@@ -424,7 +424,7 @@ function Staff() {
                     <div className="border-t pt-3 mt-3" />
 
                     {/* Lunch Break */}
-                    <div className="grid grid-cols-[110px_140px_30px_140px] items-center gap-3">
+                    <div className="grid grid-cols-[110px_110px_30px_110px] items-center gap-3">
                       <span className="text-sm text-gray-700">Lunch Break</span>
 
                       <TimeSelect
