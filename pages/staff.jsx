@@ -29,6 +29,7 @@ import api from "@/api";
 function Staff() {
   const { titles } = useServiceTitles();
   const [showstaff, setshowstaff] = useState([]);
+  const [editstaff, seteditstaff] = useState(null);
   const newtitle = [...new Set(titles)];
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
@@ -37,18 +38,50 @@ function Staff() {
       phone: "",
       wp: "",
       services: [],
-      workingHours: {
-        Monday: { from: "", to: "" },
-        Tuesday: { from: "", to: "" },
-        Wednesday: { from: "", to: "" },
-        Thursday: { from: "", to: "" },
-        Friday: { from: "", to: "" },
-        Saturday: { off: true },
-        Sunday: { off: true },
-        Lunch: { from: "", to: "" },
-      },
+      workingHours: [
+        {
+          Monday: { from: "", to: "" },
+          Tuesday: { from: "", to: "" },
+          Wednesday: { from: "", to: "" },
+          Thursday: { from: "", to: "" },
+          Friday: { from: "", to: "" },
+          Saturday: { off: true },
+          Sunday: { off: true },
+          Lunch: { from: "", to: "" },
+        },
+      ],
     },
   });
+  const edithandle = (item) => {
+    seteditstaff(item);
+    setValue("name", item.fullName);
+    setValue("email", item.email);
+    setValue("phone", item.phone);
+    setValue("services", item.services);
+    setopen(true);
+  };
+  const onupdate = async (data) => {
+    try {
+      const res = await api.put(`/api/staff/${editstaff._id}`, data);
+      fetchstaff();
+      setopen(false);
+      alert("update successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const dlte = async(id,index)=>{
+    try {
+      const res = await api.delete(`/api/staff/${id}`);
+      const copy = [...showstaff];
+      copy.splice(index,1);
+      setshowstaff(copy);
+      alert("do you want delete");
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
   const [open, setopen] = useState(false);
   const [staffpopup, setstaffpopup] = useState(false);
   const setTime = (day, type, value) => {
@@ -157,11 +190,12 @@ function Staff() {
                     <TableCell>
                       <div className="flex gap-2">
                         <PiPencilLight
-                          onClick={() => setopen(true)}
+                          onClick={() => edithandle(item)}
                           className="text-green-800 bg-green-200 p-1 rounded cursor-pointer"
                           size={22}
                         />
                         <RiDeleteBin6Line
+                        onClick={()=>dlte(item._id,i)}
                           className="text-red-800 bg-red-300 p-1 rounded cursor-pointer"
                           size={22}
                         />
@@ -173,81 +207,98 @@ function Staff() {
             </Table>
           </div>
         </div>
-        <Popup open={open} onOpenChange={setopen} title="edit staff #4">
-          <div className="space-y-4">
-            <Accordion type="single" className="space-y-1.5" collapsible>
-              {/* DETAILS */}
-              <AccordionItem
-                value="details"
-                className="border rounded-md data-[state=open]:bg-emerald-50"
-              >
-                <AccordionTrigger className="px-4 py-3  text-emerald-800 font-bold text-xl rounded-t-md">
-                  Details
-                </AccordionTrigger>
-                <AccordionContent className="px-4 py-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <Label className="text-xs font-semibold">FULL NAME</Label>
-                      <Input defaultValue="DR BC Lakhera" className="mt-1" />
+        {/* edit popup function */}
+        <Popup open={open} onOpenChange={setopen} title="edit staff">
+          <form onSubmit={handleSubmit(onupdate)}>
+            <div className="space-y-4">
+              <Accordion type="single" className="space-y-1.5" collapsible>
+                {/* DETAILS */}
+                <AccordionItem
+                  value="details"
+                  className="border rounded-md data-[state=open]:bg-emerald-50"
+                >
+                  <AccordionTrigger className="px-4 py-3  text-emerald-800 font-bold text-xl rounded-t-md">
+                    Details
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 py-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <Label className="text-xs font-semibold">
+                          FULL NAME
+                        </Label>
+                        <Input
+                          {...register("name")}
+                          defaultValue="DR BC Lakhera"
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs font-semibold">EMAIL</Label>
+                        <Input
+                          {...register("email")}
+                          defaultValue="Lakherahomoeopathycentre@"
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label
+                          className="text-xs font-semibold"
+                          
+                        >
+                          PHONE
+                        </Label>
+                        <Input defaultValue="+919311057767" {...register("phone")} className="mt-1" />
+                      </div>
                     </div>
-                    <div>
-                      <Label className="text-xs font-semibold">EMAIL</Label>
-                      <Input
-                        defaultValue="Lakherahomoeopathycentre@"
-                        className="mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label className="text-xs font-semibold">PHONE</Label>
-                      <Input defaultValue="+919311057767" className="mt-1" />
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
+                  </AccordionContent>
+                </AccordionItem>
 
-              {/* SERVICES */}
-              <AccordionItem
-                value="services"
-                className="border rounded-md data-[state=open]:bg-emerald-50"
-              >
-                <AccordionTrigger className="px-4 py-3 font-bold text-emerald-800 text-xl">
-                  Services
-                </AccordionTrigger>
-                <AccordionContent className="px-4 py-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {/* SERVICES */}
+                <AccordionItem
+                  value="services"
+                  className="border rounded-md data-[state=open]:bg-emerald-50"
+                >
+                  <AccordionTrigger className="px-4 py-3 font-bold text-emerald-800 text-xl">
+                    Services
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 py-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {newtitle.map((service) => (
+                        <label
+                          key={service}
+                          className="flex items-center gap-2 text-sm"
+                        >
+                          <input
+                            type="checkbox"
+                            value={service}
+                            {...register("services")}
+                            className="accent-emerald-600"
+                          />
+                          {service}
+                        </label>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* WORKING HOURS */}
+                <AccordionItem
+                  value="hours"
+                  className="border rounded-md data-[state=open]:bg-emerald-50"
+                >
+                  <AccordionTrigger className="px-4 py-3 text-xl font-bold text-emerald-800">
+                    Working Hours
+                  </AccordionTrigger>
+
+                  <AccordionContent className="bg-emerald-50 px-6 py-6 space-y-3">
+                    {/* Working Days */}
                     {[
-                      "Joint and Spine Care",
-                      "Metabolic Disorders",
-                      "Urinary and Kidney Care",
-                      "Men's Health",
-                      "Women's Health",
-                      "Child Health",
-                    ].map((service, i) => (
-                      <label
-                        key={i}
-                        className="flex items-center gap-2 text-sm"
-                      >
-                        <input type="checkbox" className="accent-emerald-600" />
-                        {service}
-                      </label>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-
-              {/* WORKING HOURS */}
-              <AccordionItem
-                value="hours"
-                className="border rounded-md data-[state=open]:bg-emerald-50"
-              >
-                <AccordionTrigger className="px-4 py-3 text-xl font-bold text-emerald-800">
-                  Working Hours
-                </AccordionTrigger>
-
-                <AccordionContent className="bg-emerald-50 px-6 py-6 space-y-3">
-                  {/* Working Days */}
-                  {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].map(
-                    (day) => (
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday",
+                    ].map((day) => (
                       <div
                         key={day}
                         className=" grid grid-cols-[110px_110px_30px_110px] items-center gap-2"
@@ -262,49 +313,48 @@ function Staff() {
 
                         <TimeSelect defaultValue="06:00 pm" />
                       </div>
-                    ),
-                  )}
+                    ))}
 
-                  {/* Saturday */}
-                  <DayOffRow day="Saturday" />
+                    {/* Saturday */}
+                    <DayOffRow day="Saturday" />
 
-                  {/* Sunday */}
-                  <DayOffRow day="Sunday" />
+                    {/* Sunday */}
+                    <DayOffRow day="Sunday" />
 
-                  {/* Divider */}
-                  <div className="border-t pt-3 mt-3" />
+                    {/* Divider */}
+                    <div className="border-t pt-3 mt-3" />
 
-                  {/* Lunch Break */}
-                  <div className="grid grid-cols-[110px_110px_30px_110px] gap-2 items-center ">
-                    <span className="text-sm text-gray-700">Lunch Break</span>
+                    {/* Lunch Break */}
+                    <div className="grid grid-cols-[110px_110px_30px_110px] gap-2 items-center ">
+                      <span className="text-sm text-gray-700">Lunch Break</span>
 
-                    <TimeSelect defaultValue="12:00 pm" />
+                      <TimeSelect defaultValue="12:00 pm" />
 
-                    <span className="text-center text-sm text-muted-foreground">
-                      to
-                    </span>
+                      <span className="text-center text-sm text-muted-foreground">
+                        to
+                      </span>
 
-                    <TimeSelect defaultValue="12:30 pm" />
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+                      <TimeSelect defaultValue="12:30 pm" />
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
 
-            {/* SAVE BUTTON */}
-            <div className="pt-2">
-              <Button className="bg-emerald-700 hover:bg-emerald-800 px-8">
-                SAVE
-              </Button>
+              {/* SAVE BUTTON */}
+              <div className="pt-2">
+                <Button
+                  type="submit"
+                  className="bg-emerald-700 hover:bg-emerald-800 px-8"
+                >
+                  SAVE
+                </Button>
+              </div>
             </div>
-          </div>
+          </form>
         </Popup>
         {/* add staff popup */}
 
-        <Popup
-          open={staffpopup}
-          onOpenChange={setstaffpopup}
-          title="edit staff #4"
-        >
+        <Popup open={staffpopup} onOpenChange={setstaffpopup} title="add staff">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-4">
               {/* ✅ ONE Accordion Wrapper */}
