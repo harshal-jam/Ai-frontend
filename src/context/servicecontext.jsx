@@ -10,7 +10,7 @@ export const ServiceTitleProvider = ({ children }) => {
     const fetchServiceTitles = async () => {
       try {
         const res = await api.get("/api/services");
-        const onlyTitles = res.data.data.map(item => item.title);
+        const onlyTitles = res.data.data;
         setTitles(onlyTitles);
       } catch (error) {
         console.log("service titles error", error);

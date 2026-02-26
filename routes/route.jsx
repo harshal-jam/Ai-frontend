@@ -9,6 +9,7 @@ import Calendar from "../pages/calendar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Signup from "../pages/signup";
 import { ServiceTitleProvider } from "../src/context/servicecontext";
+import Booking from "../pages/bookingsystem";
 function Routing() {
   return (
     <ServiceTitleProvider>
@@ -23,6 +24,7 @@ function Routing() {
         <Route path="/service" element={<Service />} />
         <Route path="/staff" element={<Staff />} />
         <Route path="/appointments" element={<Appointments />} />
+        <Route path="/bookingsystem" element={<Booking/>}/>
       </Routes>
     </BrowserRouter>
     </ServiceTitleProvider>

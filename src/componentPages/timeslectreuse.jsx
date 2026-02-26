@@ -5,12 +5,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-const TimeSelect = ({ defaultValue , value , onChange}) => {
+const TimeSelect = ({ value, onChange }) => {
   return (
-    <Select  value={value}
-      onValueChange={(val) => onChange(val)} defaultValue={defaultValue}>
+    <Select value={value} onValueChange={(val) => onChange(val)}>
       <SelectTrigger className="h-9">
-        <SelectValue />
+        <SelectValue placeholder="Select time" />
       </SelectTrigger>
       <SelectContent>
         {[
@@ -28,4 +27,5 @@ const TimeSelect = ({ defaultValue , value , onChange}) => {
     </Select>
   );
 };
+
 export default TimeSelect;

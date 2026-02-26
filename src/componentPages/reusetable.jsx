@@ -12,11 +12,11 @@ function Reusetable({
         <p className="text-2xl font-bold">{headertitle}</p>
 
         <div className="flex gap-2">
-          <Button className="capitalize bg-white text-black flex gap-1">
+          <Button className="capitalize bg-white text-black hover:bg-amber-50 flex gap-1">
             <MdOutlineFeedback color="green" />
             feedback
           </Button>
-          <Button className="capitalize bg-white text-black flex gap-1">
+          <Button className="capitalize bg-white text-black hover:bg-amber-50 flex gap-1">
             <IoDocumentTextOutline color="green" />
             documentation
           </Button>
